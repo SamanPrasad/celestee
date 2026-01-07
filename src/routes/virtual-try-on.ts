@@ -64,7 +64,7 @@ router.post("/", async (req, res) => {
         "data"
       ] ?? null;
 
-    res.status(500).json({
+    res.json({
       success: data ? true : false,
       data,
     });
