@@ -1,8 +1,77 @@
+import axios from "axios";
 import Router from "express";
 const router = Router();
 
-router.get("/", (_req, res) => {
-  res.send("try on");
+router.post("/", async (req, res) => {
+  try {
+    const { person, outfit } = req.body;
+    const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+
+    if (!GEMINI_API_KEY) {
+      return res.status(500).json({ error: "Missing Gemini API key" });
+    }
+
+    if (!person || !outfit) {
+      return res.status(400).json({ error: "Missing images" });
+    }
+
+    const body = {
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              inlineData: {
+                mimeType: "image/jpeg",
+                data: person,
+              },
+            },
+            {
+              inlineData: {
+                mimeType: "image/jpeg",
+                data: outfit,
+              },
+            },
+            {
+              text: `Generate a photorealistic image where the person in the first image is wearing the exact outfit from the second image.
+      Preserve the original outfit color exactly as shown in the second image. Generated image should contain a low resolution.`,
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        responseModalities: ["IMAGE"],
+        imageConfig: {
+          aspectRatio: "1:1",
+        },
+      },
+    };
+
+    const response = await axios.post(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent",
+      body,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-goog-api-key": GEMINI_API_KEY,
+        },
+        timeout: 600_000, // 600 seconds (same as your PHP code)
+      }
+    );
+
+    res.json(
+      response.data["candidates"][0]["content"]["parts"][0]["inlineData"][
+        "data"
+      ] ?? null
+    );
+  } catch (error: any) {
+    console.error("Gemini API error:", error.response?.data || error.message);
+
+    res.status(500).json({
+      error: "Image generation failed",
+      details: error.response?.data || error.message,
+    });
+  }
 });
 
 export default router;
