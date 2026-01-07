@@ -59,11 +59,15 @@ router.post("/", async (req, res) => {
       }
     );
 
-    res.json(
+    const data =
       response.data["candidates"][0]["content"]["parts"][0]["inlineData"][
         "data"
-      ] ?? null
-    );
+      ] ?? null;
+
+    res.status(500).json({
+      success: data ? true : false,
+      data,
+    });
   } catch (error: any) {
     console.error("Gemini API error:", error.response?.data || error.message);
 
