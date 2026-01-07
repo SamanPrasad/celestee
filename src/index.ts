@@ -1,14 +1,16 @@
 import express from "express";
 import dotenv from "dotenv";
+import tryon from "./routes/virtual-try-on";
 dotenv.config();
 const app = express();
 
 const PORT = process.env.SERVER_PORT || 8080;
 
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
+app.use("/virtual-try-on", tryon);
+app.get("/", (_req, res) => {
+  res.send("Welcome to Celestee");
 });
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
 });
