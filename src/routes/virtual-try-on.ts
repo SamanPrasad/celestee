@@ -33,8 +33,10 @@ router.post("/", async (req, res) => {
               },
             },
             {
-              text: `Generate a photorealistic image where the person in the first image is wearing the exact outfit from the second image.
-      Preserve the original outfit color exactly as shown in the second image. Generated image should contain a low resolution.`,
+              text: `Generate a photorealistic image where the person in the first image is wearing the exact outfit from the second image. 
+     Preserve the original outfit color, shade, pattern, texture, fabric, logos, and design details exactly as shown in the second image. 
+     Do not alter, reinterpret, stylize, enhance, recolor, or substitute the outfit in any way. 
+     Only change the fit to match the person’s body while keeping the outfit visually identical.`,
             },
           ],
         },
