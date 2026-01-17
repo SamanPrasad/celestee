@@ -12,11 +12,11 @@ app.use(express.json({ limit: "50mb" }));
 
 app.use(
   cors({
-    origin: "https://celestee.co.uk",
+    origin: "http://localhost:8080",
     allowedHeaders: "*",
     methods: "*",
     credentials: false,
-  })
+  }),
 );
 
 app.use("/virtual-try-on", tryon);
