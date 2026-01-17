@@ -12,7 +12,8 @@ app.use(express.json({ limit: "50mb" }));
 
 app.use(
   cors({
-    origin: "http://localhost:8080",
+    // origin: "https://celestee.co.uk",
+    origin: "http://localhost/wordpress",
     allowedHeaders: "*",
     methods: "*",
     credentials: false,
